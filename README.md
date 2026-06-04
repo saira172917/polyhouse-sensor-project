@@ -10,5 +10,5 @@ The pipeline is implemented in Python using modular scripts. The generate\_datas
 
 
 
-The final output is a clean, analysis-ready dataset with no missing values, making it suitable for machine learning workflows. This project demonstrates key concepts in data preprocessing, data quality assessment, and pipeline structuring in a real-world agritech scenario
+The final output is a clean, analysis-ready dataset with no missing values, making it suitable for machine learning workflows. This project demonstrates key concepts in data preprocessing, data quality assessment, and pipeline structuring in a real-world agritech scenario.
 
