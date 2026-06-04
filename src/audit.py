@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Load raw data
-df = pd.read_csv("data/raw/polyhouse_sensor.csv")
+df = pd.read_csv("data/raw/polyhouse_sensors.csv")
 
 print("=== DATASET SHAPE ===")
 print(df.shape)

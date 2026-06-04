@@ -1,41 +1,30 @@
+# src/clean.py
 import pandas as pd
+from pathlib import Path
 
-# Load raw data
-df = pd.read_csv("data/raw/polyhouse_sensor.csv")
+df = pd.read_parquet("data/interim/01_loaded.parquet")
 
-print("=== NULL COUNTS BEFORE CLEANING ===")
-print(df.isnull().sum())
+# Missing report
+print(df.isna().sum())
 
-# Temperature: median
-df["temperature_c"] = df["temperature_c"].fillna(
-    df["temperature_c"].median()
+# Valid ranges for oyster polyhouse
+valid = (
+    df["humidity_pct"].between(50, 100)
+    & df["temperature_c"].between(10, 35)
+    & df["co2_ppm"].between(400, 2000)
+    & df["yield_kg"].notna()
 )
+df = df[valid].copy()
 
-# Humidity: median
-df["humidity_pct"] = df["humidity_pct"].fillna(
-    df["humidity_pct"].median()
-)
+# Short gap: forward-fill sensor columns only
+cols = ["temperature_c", "humidity_pct", "co2_ppm"]
+df[cols] = df[cols].ffill(limit=2)
 
-# Soil moisture: forward fill
-df["soil_moisture_pct"] = df["soil_moisture_pct"].ffill()
+# Drop remaining rows with null target
+df = df.dropna(subset=["yield_kg"])
 
-# Light: median
-df["light_lux"] = df["light_lux"].fillna(
-    df["light_lux"].median()
-)
+# Duplicates by timestamp
+df = df.drop_duplicates(subset=["timestamp"], keep="last")
 
-# CO2: median
-df["co2_ppm"] = df["co2_ppm"].fillna(
-    df["co2_ppm"].median()
-)
-
-print("\n=== NULL COUNTS AFTER CLEANING ===")
-print(df.isnull().sum())
-
-# Save cleaned dataset
-df.to_parquet(
-    "data/processed/02_cleaned.parquet",
-    index=False
-)
-
-print("\nCleaned dataset saved successfully!")
+df.to_parquet("data/interim/02_cleaned.parquet", index=False)
+print(f"Clean rows: {len(df)}")
