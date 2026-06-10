@@ -21,6 +21,12 @@ This project predicts crop yield using sensor data (temperature, humidity, CO₂
 - data/processed/X_test.parquet
 - models/minmax_scaler.joblib
 
+## Train-Test Split Summary
+
+- Train size: 292
+- Test size: 73
+- Split: 80/20 chronological split
+
 ## How to Run
 ```bash
 python src/features.py
