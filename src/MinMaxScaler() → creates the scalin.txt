@@ -1,0 +1,4 @@
+MinMaxScaler() → creates the scaling tool.
+fit(X) → learns the minimum and maximum values from the data.
+transform(X) → scales the values to the range 0–1.
+fit_transform(X) → performs both steps in one line and stores the scaled data in X_scaled.
