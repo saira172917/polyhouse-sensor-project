@@ -259,6 +259,23 @@ python src/train_model.py
 * Trained ML model (`.pkl`)
 * Scaler artifacts (`.joblib`)
 
+## 📊 Final Training Results
+
+### Dataset Split
+- Train size: 292
+- Test size: 73
+- Split method: Chronological (80/20)
+- Train period: 2024-01-01 → 2024-10-18
+- Test period: 2024-10-19 → 2024-12-30
+
+### Feature Scaling
+- Method: MinMaxScaler
+- Range: [0, 1]
+- Fit only on training data
+
+### Model Performance (Baseline)
+- MAE: 0.45
+- R² Score: 0.32
 ---
 
 ## 🧠 Key Concepts Demonstrated
