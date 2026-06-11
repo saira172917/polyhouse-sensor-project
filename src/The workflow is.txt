@@ -1,0 +1,11 @@
+The workflow is:
+
+Generate Temperature Values
+           +
+Generate Humidity Values
+           +
+Generate CO₂ Values
+           ↓
+Use them to calculate Yield
+           ↓
+Store everything in polyhouse_sensors.csv
