@@ -34,6 +34,15 @@ This suggests that:
 - Non-linear relationships exist in the dataset
 
 ---
+## 📌 Coefficient Interpretation (Linear Model)
+
+The Linear Regression coefficients represent how each environmental factor influences crop yield:
+
+- Temperature: affects yield within an optimal range; extreme values may reduce productivity.
+- Humidity: generally shows a positive relationship with yield, supporting plant growth conditions.
+- CO₂ concentration: contributes positively to yield due to enhanced photosynthesis.
+
+Overall, the coefficients confirm that environmental conditions have measurable but partially linear effects on crop yield.
 
 ## 📈 Conclusion
 
@@ -54,3 +63,4 @@ Linear Regression is a **good baseline model**, but not sufficient for final pre
 ✔ Good interpretability  
 ❌ Limited predictive power  
 ➡ Use as baseline only, not production model
+The Linear Regression model achieved an R² score of 0.427, indicating that it explains approximately 42.7% of the variability in crop yield. This is acceptable as a baseline model and provides a useful benchmark for comparison with more advanced non-linear models, which may better capture complex interactions among environmental factors.
