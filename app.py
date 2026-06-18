@@ -1,89 +1,142 @@
-
 import streamlit as st
 import matplotlib.pyplot as plt
+import numpy as np
 
 from src.predict import predict_yield
 
-# ----------------------------------
-# Cache model loading
-# ----------------------------------
 @st.cache_resource
-def load_predictor():
+def get_model():
     return predict_yield
 
-predict = load_predictor()
-
+predict = get_model()
 # ----------------------------------
-# Page configuration
+# PAGE CONFIG
 # ----------------------------------
 st.set_page_config(
-    page_title="Polyhouse Yield Predictor",
+    page_title="Polyhouse Yield System",
     page_icon="🌿",
     layout="centered"
 )
 
-st.title("🌿 Polyhouse Yield Predictor")
-st.caption("Agritech environmental forecasting from sensor data")
+st.title("🌿 Polyhouse Yield Prediction System")
+st.caption("AI-powered agritech monitoring dashboard")
+
 
 # ----------------------------------
-# Sidebar Inputs
+# MODEL METADATA
 # ----------------------------------
-with st.sidebar:
+MODEL_INFO = {
+    "model_name": "Random Forest Yield Model",
+    "version": "1.0",
+    "features": ["Temperature", "Humidity", "CO₂"],
+    "output": "Yield (kg)"
+}
 
-    st.header("Sensor Readings")
-
-    temp = st.slider(
-        "Temperature (°C)",
-        min_value=10.0,
-        max_value=35.0,
-        value=22.0,
-        step=0.1
-    )
-
-    humid = st.slider(
-        "Humidity (%)",
-        min_value=50.0,
-        max_value=100.0,
-        value=88.0,
-        step=0.5
-    )
-
-    co2 = st.slider(
-        "CO₂ (ppm)",
-        min_value=400,
-        max_value=2000,
-        value=900,
-        step=10
-    )
 
 # ----------------------------------
-# Prediction
+# SIDEBAR INPUTS (MERGED)
+# ----------------------------------
+st.sidebar.header("Sensor Controls")
+
+temp = st.sidebar.slider("Temperature (°C)", 10.0, 40.0, 22.0, 0.1)
+humid = st.sidebar.slider("Humidity (%)", 30.0, 100.0, 75.0, 0.5)
+co2 = st.sidebar.slider("CO₂ (ppm)", 300, 2000, 900, 10)
+
+
+# ----------------------------------
+# SMART RISK + WARNINGS (FIXED)
+# ----------------------------------
+risk_score = 0
+alerts = []
+
+# Temperature rules
+if temp < 15 or temp > 35:
+    risk_score += 35
+    alerts.append("🌡 Temperature out of optimal range (15–35°C)")
+
+elif temp < 18 or temp > 32:
+    risk_score += 15
+
+# Humidity rules
+if humid < 50 or humid > 90:
+    risk_score += 35
+    alerts.append("💧 Humidity out of optimal range (50–90%)")
+
+elif humid < 55 or humid > 85:
+    risk_score += 15
+
+# CO2 rules
+if co2 < 400 or co2 > 1500:
+    risk_score += 30
+    alerts.append("🫧 CO₂ out of optimal range (400–1500 ppm)")
+
+elif co2 < 500 or co2 > 1200:
+    risk_score += 10
+
+risk_score = min(risk_score, 100)
+
+
+# ----------------------------------
+# STATUS DISPLAY (ALWAYS VISIBLE)
+# ----------------------------------
+st.subheader("🚨 System Health Status")
+
+if risk_score < 30:
+    st.success(f"🟢 Healthy Conditions | Risk Score: {risk_score}/100")
+
+elif risk_score < 70:
+    st.warning(f"🟡 Moderate Risk | Risk Score: {risk_score}/100")
+
+else:
+    st.error(f"🔴 High Risk Detected | Risk Score: {risk_score}/100")
+
+
+# ----------------------------------
+# ALERTS (FIXED VISIBILITY)
+# ----------------------------------
+if alerts:
+    st.markdown("### ⚠ Active Alerts")
+    for a in alerts:
+        st.warning(a)
+
+
+# ----------------------------------
+# PREDICTION BUTTON (COMBINED LOGIC)
 # ----------------------------------
 if st.button("Predict Yield"):
 
-    kg = predict(temp, humid, co2)
+    # choose model from FIRST script logic
+    yield_value = predict_yield(temp, humid, co2)
 
-    st.metric(
-        label="Estimated Crop Yield",
-        value=f"{kg:.2f} kg"
-    )
+    st.metric("Estimated Yield (kg)", f"{yield_value:.2f}")
 
     st.success("Prediction completed successfully!")
 
-    # ------------------------------
-    # Optional Sensitivity Chart
-    # ------------------------------
-    st.subheader("Temperature Sensitivity")
 
-    temps = list(range(10, 36))
-    preds = [predict(t, humid, co2) for t in temps]
+    # ----------------------------------
+    # CHART 1: Yield vs Temperature
+    # ----------------------------------
+    st.subheader("Yield vs Temperature")
+
+    temp_range = np.linspace(10, 40, 30)
+    predictions = [predict_yield(t, humid, co2) for t in temp_range]
 
     fig, ax = plt.subplots()
-
-    ax.plot(temps, preds, linewidth=2)
-
+    ax.plot(temp_range, predictions, linewidth=2)
     ax.set_xlabel("Temperature (°C)")
-    ax.set_ylabel("Predicted Yield (kg)")
-    ax.set_title("Yield vs Temperature")
-
+    ax.set_ylabel("Yield (kg)")
     st.pyplot(fig)
+
+
+
+# ----------------------------------
+# MODEL METADATA
+# ----------------------------------
+with st.expander("📦 Model Metadata"):
+    st.json(MODEL_INFO)
+
+
+# ----------------------------------
+# FOOTER
+# ----------------------------------
+st.caption("Built for agritech ML deployment • Streamlit dashboard ready")
