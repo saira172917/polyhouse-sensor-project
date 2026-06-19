@@ -130,3 +130,7 @@ In real-world ML systems, clean architecture, testing, and deployment matter mor
 🌐 Live Demo :
 
 http://localhost:8501/
+
+
+Live APP URL:
+https://polyhouse-sensor-project-jp2gisjeaf84xzw9y9xh2e.streamlit.app/
