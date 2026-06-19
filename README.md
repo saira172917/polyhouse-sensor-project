@@ -127,6 +127,6 @@ Streamlit UI remains stable under failure
 
 In real-world ML systems, clean architecture, testing, and deployment matter more than model complexity.
 
-🌐 Live Demo
+🌐 Live Demo :
 
 http://localhost:8501/
