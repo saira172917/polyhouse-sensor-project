@@ -1,176 +1,121 @@
-🌿 Polyhouse Sensor Yield Prediction Pipeline (Final README)
+Polyhouse Sensor Yield Prediction System
 📌 Overview
 
-This project is an end-to-end machine learning pipeline designed to predict crop yield (yield_kg) using microclimate sensor data collected from a controlled polyhouse environment.
+This project is an end-to-end machine learning system with a Streamlit web application that predicts crop yield (yield_kg) using real-time polyhouse sensor data.
 
-It covers the full ML lifecycle:
+It includes the full ML lifecycle:
 
-data ingestion → validation → cleaning → feature engineering → model training → evaluation → comparison → inference
+Data ingestion → validation → cleaning → feature engineering → model training → evaluation → testing → deployment
 
-Two models were evaluated:
-
-📊 Linear Regression (baseline)
-🌲 Random Forest Regressor (default + tuned)
-
-The objective is to evaluate whether non-linear ensemble models improve predictive performance over a simple statistical baseline.
+The system also includes a production-style UI, error handling, and automated testing (pytest).
 
 🎯 Objective
 
-To build a predictive system for estimating crop yield using environmental variables and analyze relationships between:
+To predict agricultural yield based on environmental conditions and analyze their influence on crop productivity.
 
-🌡 Temperature (°C)
-💧 Humidity (%)
-🌫 CO₂ levels (ppm)
-📊 Dataset
-Features:
-temperature_c
-humidity_pct
-co2_ppm
-Target:
-yield_kg
-🏗️ Full Project Directory Structure
+🌡 Input Features:
+Temperature (°C)
+Humidity (%)
+CO₂ (ppm)
+🌾 Output:
+Predicted Crop Yield (kg)
+🚀 Key Features
+🧠 Machine Learning
+Linear Regression (baseline)
+Random Forest (default + tuned)
+Feature alignment using feature_cols.json
+Model comparison and evaluation
+🌐 Streamlit Web App
+Real-time yield prediction
+⏳ Loading spinner during inference
+📊 Yield vs Temperature visualization
+⚠️ Smart risk scoring system
+🚨 Environmental alerts
+📦 Model metadata viewer
+❌ Friendly error handling (no crashes)
+🧪 Testing
+Pytest-based unit tests
+Prediction validation checks
+Ensures model reliability
+📁 Complete Project Structure
 polyhouse-sensor-project/
 │
-├── .venv/                              # Virtual environment
+├── app.py                              # 🌐 Streamlit web application (UI dashboard)
+├── requirements.txt                    # 📦 Python dependencies
+├── README.md                           # 📘 Project documentation
+├── .gitignore                          # 🚫 Files excluded from Git tracking
 │
-├── data/                               # Data storage layers
-│   ├── raw/                            # Original dataset
-│   │   └── polyhouse_sensors.csv
+├── .venv/                              # 🐍 Virtual environment (DO NOT push to GitHub)
+│
+├── src/                                # 🧠 Core ML pipeline (backend logic)
+│   ├── ingest.py                       # Data ingestion module
+│   ├── audit.py                       # Data validation checks
+│   ├── clean.py                       # Data cleaning pipeline
+│   ├── eda.py                         # Exploratory Data Analysis
+│   ├── features.py                    # Feature engineering
+│   ├── train_test_split.py            # Train-test splitting logic
+│   ├── linear_model.py                # Linear regression training
+│   ├── linear_diagnostics.py          # Model diagnostics
+│   ├── train_random_forest.py         # RF training (default)
+│   ├── train_gridsearch.py            # Hyperparameter tuning
+│   ├── train_model_pipeline.py        # Full training pipeline
+│   ├── train_full_pipeline.py         # End-to-end training script
+│   ├── train_model.py                 # Alternate training script
+│   ├── predict.py                     # 🔮 Inference + prediction logic
+│   ├── generate.py                    # Synthetic data generation (if used)
+│   └── __init__.py                    # Python package initializer
+│
+├── models/                             # 💾 Saved ML models + artifacts
+│   ├── champion.joblib                # Final selected model
+│   ├── linear_model.joblib
+│   ├── linear_regression.joblib
+│   ├── random_forest.joblib
+│   ├── random_forest_default.joblib
+│   ├── random_forest_tuned.joblib     # ⭐ model currently used in app
+│   ├── best_random_forest.joblib
+│   ├── yield_model.pkl
+│   ├── feature_cols.json              # Feature order reference
+│   ├── rf_best_params.json            # Best hyperparameters
+│   ├── minmax_scaler.joblib
+│   ├── minmax_scaler_train.joblib
+│
+├── data/                               # 📊 Dataset storage layer
+│   ├── raw/
+│   │   └── polyhouse_sensors.csv      # Original dataset
 │   │
-│   ├── interim/                        # Intermediate processed data
+│   ├── interim/
 │   │   ├── 01_loaded.parquet
-│   │   └── 02_cleaned.parquet
+│   │   ├── 02_cleaned.parquet
 │   │
-│   └── processed/                      # ML-ready datasets
+│   └── processed/
 │       ├── features.parquet
 │       ├── X_train.parquet
 │       ├── X_test.parquet
 │       ├── y_train.parquet
 │       └── y_test.parquet
 │
-├── docs/                               # Documentation
-│   └── cleaning_log.md
-│
-├── models/                             # Model artifacts
-│   ├── champion.joblib                 # Final selected model
-│   ├── linear_model.joblib
-│   ├── random_forest_default.joblib
-│   ├── random_forest_tuned.joblib
-│   ├── best_random_forest.joblib
-│   ├── yield_model.pkl
-│   ├── feature_cols.json
-│   ├── rf_best_params.json
-│   ├── minmax_scaler.joblib
-│   └── minmax_scaler_train.joblib
-│
-├── reports/                            # Evaluation reports
+├── reports/                            # 📈 Analysis & evaluation outputs
 │   ├── figures/
 │   │   ├── corr_heatmap.png
 │   │   ├── pred_vs_actual.png
 │   │   ├── residuals_linear.png
 │   │   ├── rf_importance.png
-│   │   └── scatter_yield.png
+│   │   ├── scatter_yield.png
 │   │
-│   ├── model_comparison.csv
-│   ├── cv_results.md
-│   ├── data_quality.md
-│   ├── eda_summary.md
-│   ├── linear_diagnostics.md
-│   └── limitations.md
+│   ├── model_comparison.csv           # Metrics table
+│   ├── cv_results.md                  # Cross-validation results
+│   ├── data_quality.md                # Data validation report
+│   ├── eda_summary.md                 # EDA insights
+│   ├── linear_diagnostics.md          # Residual analysis
+│   ├── limitations.md                 # Model limitations
 │
-├── src/                                # Source code
-│   ├── ingest.py
-│   ├── audit.py
-│   ├── clean.py
-│   ├── eda.py
-│   ├── features.py
-│   ├── train_test_split.py
-│   ├── linear_model.py
-│   ├── linear_diagnostics.py
-│   ├── train_random_forest.py
-│   ├── train_gridsearch.py
-│   ├── train_model_pipeline.py
-│   ├── train_full_pipeline.py
-│   ├── train_model.py
-│   ├── predict.py
-│   └── generate.py
+├── tests/                              # 🧪 Unit testing (pytest)
+│   └── test_predict.py                # Prediction validation test
 │
-├── requirements.txt
-├── The workflow is.txt
-└── README.md
-🔄 ML Pipeline Workflow
-1. Data Ingestion
+└── docs/                               # 📚 Documentation folder
+    └── cleaning_log.md               # Data cleaning notes
 
-Raw CSV → structured dataset
-
-2. Data Validation
-Missing values
-Schema checks
-Outlier detection
-3. Data Cleaning
-Noise removal
-Missing value handling
-Type correction
-4. EDA
-Correlation analysis
-Distribution plots
-Feature relationships
-5. Feature Engineering
-Scaling
-Feature alignment
-6. Train-Test Split
-
-Chronological 80/20 split
-
-7. Model Training
-Linear Regression
-Random Forest (default + tuned)
-8. Hyperparameter Tuning
-
-GridSearchCV optimization
-
-9. Evaluation
-MAE
-RMSE
-R²
-10. Inference
-
-Saved model used for prediction
-
-📈 Final Model Comparison
-Model	MAE	RMSE	R²
-Linear Regression	0.419	0.535	0.427 🏆
-Random Forest (Default)	0.449	0.580	0.328
-Random Forest (Tuned)	0.445	0.562	0.369
-🏆 Champion Model
-✔ Selected Model:
-
-Linear Regression
-
-🧠 Why it won:
-Lowest MAE → best accuracy
-Lowest RMSE → most stable predictions
-Highest R² → best variance explanation
-Generalizes better than complex models on this dataset
-
-👉 Insight: The dataset has a mostly linear structure, so simpler models perform better than ensembles.
-
-🌲 Feature Importance (RF Insight)
-🌡 Temperature → strongest influence
-💧 Humidity → moderate influence
-🌫 CO₂ → smaller but relevant
-📉 Linear Model Diagnostics
-Residuals show mild non-linearity
-Slight underfitting observed
-Justifies testing ensemble models
-🚀 How to Run
-Install dependencies
-pip install -r requirements.txt
-Train full pipeline
-python src/train_model_pipeline.py
-Run inference
-python src/predict.py
-🔮 Inference Example
+    Example Prediction
 from src.predict import predict_yield
 
 print(predict_yield(
@@ -180,25 +125,30 @@ print(predict_yield(
 ))
 Output:
 Predicted Yield (kg): 16.99
-📊 Outputs Generated
-Trained models (.joblib)
-Metrics table (CSV)
-Correlation heatmaps
-Residual plots
-Feature importance charts
-📌 Conclusion
+⚠️ Error Handling
+Missing model → friendly error message (no crash)
+Invalid input → safe exception handling
+Streamlit UI remains stable under failure
+🚀 Key Improvements in This Version
 
-Linear Regression outperformed Random Forest models, showing that the relationship between environmental conditions and crop yield is largely linear.
+✔ Streamlit dashboard integration
+✔ UX enhancements (spinner, metrics, icons)
+✔ Smart risk scoring system
+✔ Interactive visualization
+✔ Pytest integration
+✔ Production-style error handling
+✔ Fully modular ML pipeline
 
-Final Insight:
+🟢 Project Status
 
-Simple models can outperform complex models when the dataset structure is not highly non-linear.
+✔ End-to-end ML pipeline completed
+✔ Model comparison done
+✔ Streamlit deployment ready
+✔ Testing implemented
+✔ UX polished
+✔ GitHub ready
+✔ Submission ready
 
-🟢 PROJECT STATUS: COMPLETE
+🧠 Final Insight
 
-✔ End-to-end ML pipeline
-✔ Model comparison completed
-✔ Champion model selected
-✔ Inference working
-✔ Fully reproducible system
-✔ Submission-ready documentation
+In real-world ML systems, clean architecture + reliable deployment + testing is more important than model complexity.
