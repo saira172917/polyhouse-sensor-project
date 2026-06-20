@@ -99,6 +99,7 @@ print(predict_yield(
 ))
 Output:
 Predicted Yield (kg): 16.99
+The trained model (`model.pkl`) is included in this repository under the `models/` directory and is loaded by `app.py` during prediction.
 ⚠️ Error Handling
 Missing model → friendly error message (no crash)
 Invalid inputs → safe exception handling
