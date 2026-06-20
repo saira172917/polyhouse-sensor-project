@@ -1,14 +1,8 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
-
+from utils.logger import log_prediction
 from src.predict import predict_yield
-
-@st.cache_resource
-def get_model():
-    return predict_yield
-
-predict = get_model()
 
 # ----------------------------------
 # PAGE CONFIG
@@ -101,6 +95,9 @@ if st.button("🔍 Predict Yield", use_container_width=True):
                 co2_ppm=co2
             )
 
+        # ✅ LOGGING ADDED HERE
+        log_prediction(temperature, humidity, co2, yield_prediction)
+
         st.success("✅ Prediction completed successfully!")
         st.metric("🌾 Estimated Crop Yield", f"{yield_prediction:.2f} kg")
 
@@ -115,8 +112,8 @@ if st.button("🔍 Predict Yield", use_container_width=True):
 
         fig, ax = plt.subplots(figsize=(7, 3.5))
         ax.plot(temp_range, yield_curve, color="#2ecc71", linewidth=2.5)
-        ax.axvline(temperature, color="#e74c3c", linestyle="--", linewidth=1.5,
-                   label=f"Current: {temperature:.1f}°C")
+        ax.axvline(temperature, color="#e74c3c", linestyle="--",
+                   linewidth=1.5, label=f"Current: {temperature:.1f}°C")
         ax.set_xlabel("Temperature (°C)")
         ax.set_ylabel("Yield (kg)")
         ax.set_title("Predicted Yield Across Temperature Range")
