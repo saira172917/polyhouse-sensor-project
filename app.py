@@ -1,7 +1,9 @@
 import streamlit as st
+import os
 import matplotlib.pyplot as plt
 import numpy as np
-from utils.logger import log_prediction
+
+from src.utils.logger import log_prediction
 from src.predict import predict_yield
 
 # ----------------------------------
@@ -12,6 +14,11 @@ st.set_page_config(
     page_icon="🌿",
     layout="centered"
 )
+
+# ----------------------------------
+# DEBUG (safe after st import)
+# ----------------------------------
+st.write("RUNNING FILE:", os.path.abspath(__file__))
 
 st.title("🌿 Polyhouse Yield Prediction System")
 st.caption("AI-powered agritech monitoring dashboard")
@@ -95,14 +102,12 @@ if st.button("🔍 Predict Yield", use_container_width=True):
                 co2_ppm=co2
             )
 
-        # ✅ LOGGING ADDED HERE
         log_prediction(temperature, humidity, co2, yield_prediction)
 
         st.success("✅ Prediction completed successfully!")
         st.metric("🌾 Estimated Crop Yield", f"{yield_prediction:.2f} kg")
 
         st.subheader("📈 Yield vs Temperature")
-        st.caption(f"Holding humidity={humidity:.0f}% and CO₂={co2} ppm constant")
 
         temp_range = np.linspace(10, 40, 60)
         yield_curve = [
@@ -111,8 +116,8 @@ if st.button("🔍 Predict Yield", use_container_width=True):
         ]
 
         fig, ax = plt.subplots(figsize=(7, 3.5))
-        ax.plot(temp_range, yield_curve, color="#2ecc71", linewidth=2.5)
-        ax.axvline(temperature, color="#e74c3c", linestyle="--",
+        ax.plot(temp_range, yield_curve, linewidth=2.5)
+        ax.axvline(temperature, linestyle="--",
                    linewidth=1.5, label=f"Current: {temperature:.1f}°C")
         ax.set_xlabel("Temperature (°C)")
         ax.set_ylabel("Yield (kg)")
@@ -123,7 +128,7 @@ if st.button("🔍 Predict Yield", use_container_width=True):
         st.pyplot(fig)
 
     except FileNotFoundError:
-        st.error("❌ Model file not found. Please train the model first before making predictions.")
+        st.error("❌ Model file not found. Train the model first.")
 
     except Exception as e:
         st.error(f"❌ Prediction failed: {e}")
