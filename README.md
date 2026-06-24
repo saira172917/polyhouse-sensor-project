@@ -45,7 +45,6 @@ polyhouse-sensor-project/
 ├── README.md
 ├── .gitignore
 │
-├── .venv/
 │
 ├── src/
 │   ├── ingest.py
@@ -99,7 +98,23 @@ print(predict_yield(
 ))
 Output:
 Predicted Yield (kg): 16.99
-The trained model (`model.pkl`) is included in this repository under the `models/` directory and is loaded by `app.py` during prediction.
+The trained model artifacts are stored in the models/ directory and are loaded automatically during prediction.
+
+ 📊 Model Performance
+
+Final Random Forest (Grid Search)
+
+- MAE: 0.445 kg
+- RMSE: 0.562 kg
+- R²: 0.369
+
+Best Hyperparameters:
+
+{
+  "max_depth": 8,
+  "min_samples_leaf": 5,
+  "n_estimators": 100
+}
 ⚠️ Error Handling
 Missing model → friendly error message (no crash)
 Invalid inputs → safe exception handling
@@ -114,26 +129,34 @@ Streamlit UI remains stable under failure
 ✔ Production-style error handling
 ✔ Fully modular ML pipeline
 
-🟢 Project Status
-
-✔ End-to-end ML pipeline completed
-✔ Model comparison done
-✔ Streamlit deployment ready
-✔ Testing implemented
-✔ UX polished
-✔ GitHub ready
-✔ Submission ready
-
 🧠 Final Insight
-
 In real-world ML systems, clean architecture, testing, and deployment matter more than model complexity.
 
-🌐 Live Demo :
+📄 Documentation
 
-http://localhost:8501/
-
+Final Report:
+reports/FINAL_REPORT.md
 
 Live APP URL:
 https://polyhouse-sensor-project-jp2gisjeaf84xzw9y9xh2e.streamlit.app/
 
 Presentation link: https://1drv.ms/p/c/d81f6edb00479422/IQDbilYdFIU_TpfSvkpa8vcdASQsnjZ55JYqxT45ktg2xbc?e=OxTSPq
+
+📝 Reflection
+
+This project provided hands-on experience with the complete machine learning workflow, from raw data processing to deployment of a production-ready application. Beyond model training, the project emphasized reproducibility, testing, documentation, user experience, and deployment practices. The experience highlighted that successful ML systems depend not only on predictive performance but also on maintainability, usability, and reliable engineering practices.
+
+✅ Project Status
+End-to-end ML pipeline completed
+Data cleaning and feature engineering completed
+Model comparison and tuning completed
+Streamlit deployment completed
+Automated testing implemented
+Technical documentation completed
+GitHub repository ready
+Final submission ready
+
+👤 Author
+Saira Maria Jacob
+
+B.Tech Project — Polyhouse Crop Yield Prediction System
