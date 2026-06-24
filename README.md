@@ -135,3 +135,5 @@ http://localhost:8501/
 
 Live APP URL:
 https://polyhouse-sensor-project-jp2gisjeaf84xzw9y9xh2e.streamlit.app/
+
+Presentation link: https://1drv.ms/p/c/d81f6edb00479422/IQDbilYdFIU_TpfSvkpa8vcdASQsnjZ55JYqxT45ktg2xbc?e=OxTSPq
